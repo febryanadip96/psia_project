@@ -63,23 +63,23 @@
             <label class="control-label col-sm-2" for="jenis_pembayaran">Jenis Pembayaran:</label>
             <div class="col-sm-10"> 
                 <div class="radio">
-                    <label><input type="radio" name="jenis_pembayaran" checked>Tunai</label>
+                    <label><input type="radio" name="jenis_pembayaran" id="tunai" checked>Tunai</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="jenis_pembayaran">Kredit</label>
+                    <label><input type="radio" name="jenis_pembayaran" id="kredit">Kredit</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="jenis_pembayaran">Transfer</label>
+                    <label><input type="radio" name="jenis_pembayaran" id="transfer">Transfer</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="jenis_pembayaran">Cek</label>
+                    <label><input type="radio" name="jenis_pembayaran" id="cek">Cek</label>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="bank">Nama Bank:</label>
             <div class="col-sm-10">
-                <select class="form-control" id="bank" name="bank">
+                <select class="form-control" id="bank" name="bank" disabled>
                     @foreach($banks as $bank)
                         <option value="{{$bank->id}}">{{$bank->nama}}</option>
                     @endforeach
@@ -89,13 +89,13 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="no_rek">No. Rek:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="no_rek" id="no_rek" placeholder="Nomor Rekening">
+                <input type="text" class="form-control" name="no_rek" id="no_rek" placeholder="Nomor Rekening" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="atas_nama">Atas Nama:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="atas_nama" id="atas_nama" placeholder="Atas Nama">
+                <input type="text" class="form-control" name="atas_nama" id="atas_nama" placeholder="Atas Nama" disabled>
             </div>
         </div>
         <div class="form-group">
@@ -115,6 +115,26 @@
 
 <script>
     $(function(){
+        $('#tunai').change(function(){
+            $('#bank').attr('disabled',true);
+            $('#no_rek').attr('disabled',true);
+            $('#atas_nama').attr('disabled',true);
+        });
+        $('#kredit').change(function(){
+            $('#bank').attr('disabled',false);
+            $('#no_rek').attr('disabled',false);
+            $('#atas_nama').attr('disabled',false);
+        });
+        $('#transfer').change(function(){
+            $('#bank').attr('disabled',false);
+            $('#no_rek').attr('disabled',false);
+            $('#atas_nama').attr('disabled',false);
+        });
+        $('#cek').change(function(){
+            $('#bank').attr('disabled',false);
+            $('#no_rek').attr('disabled',false);
+            $('#atas_nama').attr('disabled',false);
+        });
         $('#tambah').on('click', function(){
             $('#tabel-barang').append("<tr class='item'><td><select name='barang[]' class='form-control'><option></option>"+
                 @foreach($barangs as $barang)
@@ -138,22 +158,21 @@
             });
             $('.hapus').on('click', function(){
                 $(this).closest('tr').remove();
-                var grand_total = 0;
-                $('.item').each(function(){
-                    grand_total += parseInt($(this).find('.subtotal').val());
-                });
-                $('#grand_total').val(grand_total);
+                hitungGrandTotal();
             });
             $('.harga, .qty').change(function(){
-                //alert('masuk');
+                hitungGrandTotal();
+            });
+            function hitungGrandTotal(){
                 var grand_total = 0;
                 $('.item').each(function(){
                     grand_total += parseInt($(this).find('.subtotal').val());
                 });
                 $('#grand_total').val(grand_total);
-            });
+            }
         });
     });
+    
 
 </script>
 @endsection
