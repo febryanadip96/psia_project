@@ -48,7 +48,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" class="text-center"><a id="tambah" class="btn btn-sm btn-primary" style="vertical-align: middle;"><span class="glyphicon glyphicon-plus"></span></a></td>
+                    <td colspan="5" class="text-center"><a id="tambah" class="btn btn-sm btn-primary" style="vertical-align: middle;"><span class="glyphicon glyphicon-plus"></span> Tambah Barang</a></td>
                 </tr>
                 
             </tfoot>
@@ -93,6 +93,12 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="control-label col-sm-2" for="no_cek">No. Cek:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="no_cek" id="no_cek" placeholder="Nomor Cek" disabled>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-sm-2" for="atas_nama">Atas Nama:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="atas_nama" id="atas_nama" placeholder="Atas Nama" disabled>
@@ -118,22 +124,26 @@
         $('#tunai').change(function(){
             $('#bank').attr('disabled',true);
             $('#no_rek').attr('disabled',true);
+            $('#no_cek').attr('disabled',true);
             $('#atas_nama').attr('disabled',true);
         });
         $('#kredit').change(function(){
             $('#bank').attr('disabled',false);
             $('#no_rek').attr('disabled',false);
+            $('#no_cek').attr('disabled',true);
             $('#atas_nama').attr('disabled',false);
         });
         $('#transfer').change(function(){
             $('#bank').attr('disabled',false);
             $('#no_rek').attr('disabled',false);
+            $('#no_cek').attr('disabled',true);
             $('#atas_nama').attr('disabled',false);
         });
         $('#cek').change(function(){
-            $('#bank').attr('disabled',false);
-            $('#no_rek').attr('disabled',false);
-            $('#atas_nama').attr('disabled',false);
+            $('#bank').attr('disabled',true);
+            $('#no_rek').attr('disabled',true);
+            $('#no_cek').attr('disabled',false);
+            $('#atas_nama').attr('disabled',true);
         });
         $('#tambah').on('click', function(){
             $('#tabel-barang').append("<tr class='item'><td><select name='barang[]' class='form-control'><option></option>"+
