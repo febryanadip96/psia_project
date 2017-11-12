@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Periode extends Model
 {
     protected $table = 'periode';
+    public $incrementing =false;
+    protected $keyType = 'string';
     protected $primaryKey = 'id';
 	protected $fillable=['id', 'tgl_awal', 'tgl_akhir'];
     public $timestamps=false;

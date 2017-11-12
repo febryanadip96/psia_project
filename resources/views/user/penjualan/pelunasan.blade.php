@@ -15,7 +15,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="tanggal">Tanggal:</label>
             <div class="col-sm-10"> 
-                <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+                <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{\Carbon\Carbon::now()->format('Y-m-d')}}" readonly>
             </div>
         </div>
         <div class="form-group">
@@ -87,16 +87,14 @@
 
 <script>
      $(function(){
-        $('#tanggal').on('change', function(){
-            var jatuh_tempo = new Date('{{$notaJual->tgl_batas_diskon}}');
-            var hari_ini = new Date($(this).val());
-            if(hari_ini<=jatuh_tempo){
-                $('#nominal_bayar').val({{$notaJual->grand_total*(100-$notaJual->diskon_pelunasan)/100}});
-            }
-            else{
-                $('#nominal_bayar').val({{$notaJual->grand_total}});
-            }
-        });
+        var jatuh_tempo = new Date('{{$notaJual->tgl_batas_diskon}}');
+        var hari_ini = new Date($('#tanggal').val());
+        if(hari_ini<=jatuh_tempo){
+            $('#nominal_bayar').val({{$notaJual->grand_total*(100-$notaJual->diskon_pelunasan)/100}});
+        }
+        else{
+            $('#nominal_bayar').val({{$notaJual->grand_total}});
+        }
         $('#tunai').change(function(){
             $('#bank').attr('disabled',true);
             $('#no_rek').attr('disabled',true);

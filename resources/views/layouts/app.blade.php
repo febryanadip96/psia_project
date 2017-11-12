@@ -42,6 +42,7 @@
                         <li><a href="{{url('pembelian')}}">Nota Beli</a></li>
                         <li><a href="{{url('penjualan')}}">Nota Jual</a></li>
                         <li><a href="{{url('laporan')}}">Laporan</a></li>
+                        <li><a href="{{url('penutupan')}}">Penutupan</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -27,7 +27,7 @@
 		        <tbody>
 		        @foreach ($laporanJurnals as $laporanJurnal)
 					<tr>
-						<td>{{$laporanJurnal->tanggal}}</td>
+						<td>{{\Carbon\Carbon::parse($laporanJurnal->tanggal)->formatLocalized('%A, %d %B %Y')}}</td>
 						<td>{{$laporanJurnal->keterangan}}</td>
 						<td>{{$laporanJurnal->NamaAkun}}</td>
 						<td>Rp. {{$laporanJurnal->Debet?number_format($laporanJurnal->Debet,0,',','.'):0}}</td>

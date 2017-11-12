@@ -43,7 +43,6 @@
                             <a href="{{url('penjualan/pelunasan/'.$notaJual->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
                         @endif
                     </td>
-                    </th>
                 </tr>
             @endforeach
             

@@ -15,7 +15,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="tanggal">Tanggal:</label>
             <div class="col-sm-10"> 
-                <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+                <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{\Carbon\Carbon::now()->format('Y-m-d')}}" readonly>
             </div>
         </div>
         <div class="form-group">
@@ -79,7 +79,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="nominal_bayar">Nominal Bayar:</label>
             <div class="col-sm-10"> 
-                <input id="nominal_bayar" class="form-control" name="nominal_bayar" value="0" type="number">
+                <input id="nominal_bayar" class="form-control" name="nominal_bayar" value="0" type="number" readonly>
             </div>
         </div>
         <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-floppy-disk"></span> Simpan</button>
@@ -88,16 +88,14 @@
 
 <script>
     $(function(){
-        $('#tanggal').on('change', function(){
-            var jatuh_tempo = new Date('{{$notaBeli->tgl_batas_diskon}}');
-            var hari_ini = new Date($(this).val());
-            if(hari_ini<=jatuh_tempo){
-                $('#nominal_bayar').val({{$notaBeli->grand_total*(100-$notaBeli->diskon_pelunasan)/100}});
-            }
-            else{
-                $('#nominal_bayar').val({{$notaBeli->grand_total}});
-            }
-        });
+        var jatuh_tempo = new Date('{{$notaBeli->tgl_batas_diskon}}');
+        var hari_ini = new Date($('#tanggal').val());
+        if(hari_ini<=jatuh_tempo){
+            $('#nominal_bayar').val({{$notaBeli->grand_total*(100-$notaBeli->diskon_pelunasan)/100}});
+        }
+        else{
+            $('#nominal_bayar').val({{$notaBeli->grand_total}});
+        }
         $('#tunai').change(function(){
             $('#bank').attr('disabled',true);
             $('#no_rek').attr('disabled',true);

@@ -282,7 +282,7 @@
                 var diskon_langsung = Number($('#diskon_langsung').val());
                 grand_total *= (100-diskon_langsung)/100;
                 grand_total *= (100+ppn)/100;
-                $('#grand_total').val(grand_total.toFixed(3));
+                $('#grand_total').val(grand_total.toFixed(2));
                 $('#ppn').val(ppn);
             }
         });
