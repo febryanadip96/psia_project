@@ -138,6 +138,11 @@ class PenutupanController extends Controller
     	$akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => DB::table('vsaldoakhir')->where('nomor', '302')->first()->SaldoAkhir]);
         $urutan++;
 
+        //isi saldo akhir
+        $akunList = DB::table('vsaldoakhir')->get();
+        foreach ($akunList as $item) {
+    		$periode->akun()->updateExistingPivot($item->nomor, ['saldo_akhir' => $item->SaldoAkhir]);
+    	}
 
     	//periode baru
     	$periode = new Periode();
@@ -153,5 +158,7 @@ class PenutupanController extends Controller
     	foreach ($akunList as $item) {
     		$periode->akun()->attach($item->nomor, ['saldo_awal' => $item->SaldoAkhir, 'saldo_akhir' => 0]);
     	}
+
+    	return back();
     }
 }
