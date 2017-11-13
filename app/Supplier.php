@@ -11,4 +11,9 @@ class Supplier extends Model
 	protected $fillable=['nama', 'alamat', 'no_telp'];
     public $timestamps=false;
 	protected $guarded=['id'];
+
+	public function notaBeli()
+	{
+		$this->hasMany('App\NotaBeli', 'supplier_id');
+	}
 }

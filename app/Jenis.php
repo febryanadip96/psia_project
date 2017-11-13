@@ -10,5 +10,10 @@ class Jenis extends Model
     protected $primaryKey = 'id';
 	protected $fillable=['nama'];
     public $timestamps=false;
-	protected $guarded=['id'];   
+	protected $guarded=['id'];
+
+	public function jenis()
+	{
+		$this->hasMany('App\Barang', 'jenis_id');
+	}
 }

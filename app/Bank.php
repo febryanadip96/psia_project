@@ -10,4 +10,14 @@ class Bank extends Model
     protected $primaryKey = 'id';
 	protected $fillable=['nama'];
     public $timestamps=false;
+
+    public function notaPelunasanBeli()
+    {
+    	$this->hasMany('App\NotaPelunasanBeli', 'bank_id');
+    }
+
+    public function notaPelunasanJual()
+    {
+    	$this->hasMany('App\NotaPelunasanJual', 'bank_id');
+    }
 }

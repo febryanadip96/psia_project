@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Akun extends Model
 {
     protected $table = 'akun';
+    public $incrementing =false;
+    protected $keyType = 'string';
     protected $primaryKey = 'nomor';
-	protected $fillable=['nama','saldo_normal'];
+	protected $fillable=['nomor', 'nama','saldo_normal'];
     public $timestamps=false;
 
     public function laporan()
@@ -23,6 +25,6 @@ class Akun extends Model
 
     public function periode()
     {
-    	$this->belongsToMany('App\Periode', 'akun_has_periode', 'akun_nomor', 'periode_id')->withPivot('saldo_awal', 'saldo_akhir');
+    	$this->belongsToMany('App\Periode', 'periode_has_akun', 'akun_nomor', 'periode_id')->withPivot('saldo_awal', 'saldo_akhir');
     }
 }

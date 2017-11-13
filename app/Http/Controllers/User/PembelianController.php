@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Barang;
 use App\Supplier;
 use App\Bank;
+use App\NotaBeli;
 
 class PembelianController extends Controller
 {
@@ -17,6 +18,7 @@ class PembelianController extends Controller
 
     public function index()
     {
+        $notaBelis = NotaBeli::all();
     	return view('user.pembelian.index');
     }
 
