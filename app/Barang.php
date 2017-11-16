@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Barang extends Model
 {
     protected $table = 'barang';
+    public $incrementing =false;
+    protected $keyType = 'string';
     protected $primaryKey = 'kode';
 	protected $fillable=['kode', 'nama', 'stok', 'harga_jual', 'harga_beli_rata', 'jenis_id'];
     public $timestamps=false;
