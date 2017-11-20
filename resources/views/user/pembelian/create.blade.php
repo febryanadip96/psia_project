@@ -4,17 +4,12 @@
 <div class="container">
     <a href="{{url('pembelian')}}" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span> Kembali</a>
     <h4 class="text-center">Form Pembelian</h4><br>
-    <form class="form-horizontal">
+    <form class="form-horizontal" method="POST" action="{{url('pembelian')}}">
+        {{ csrf_field() }}
         <div class="form-group">
-            <label class="control-label col-sm-2" for="nomor_nota">No. Nota:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="nomor_nota" id="nomor_nota" placeholder="Nomor Nota" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="tanggal_nota">Tanggal:</label>
+            <label class="control-label col-sm-2" for="tanggal">Tanggal:</label>
             <div class="col-sm-10"> 
-                <input type="date" class="form-control" name="tanggal_nota" id="tanggal_nota" required>
+                <input type="date" class="form-control" name="tanggal" id="tanggal" required>
             </div>
         </div>
         <div class="form-group">
@@ -56,7 +51,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="diskon_langsung">Diskon Langsung:</label>
             <div class="col-sm-10"> 
-                <input id="diskon_langsung" class="form-control" name="diskon_langsung"  type="number">
+                <input id="diskon_langsung" class="form-control" name="diskon_langsung" value="0" type="number">
             </div>
         </div>
         <div class="form-group">
@@ -208,7 +203,7 @@
                 @foreach($barangs as $barang)
                 "<option value='{{$barang->kode}}'>{{$barang->nama}}</option>"+ 
                 @endforeach
-                "</select><td><input type='number' class='harga form-control' name='harga[]'></td><td><input class='qty form-control' type='number'></td><td><input class='subtotal form-control' type='number' readonly></td><td><a class='btn btn-sm btn-danger hapus' style='vertical-align: middle;'><span class='glyphicon glyphicon-minus'></span></a></td></tr>"
+                "</select><td><input type='number' class='harga form-control' name='harga[]'></td><td><input class='qty form-control' name='qty[]' type='number'></td><td><input class='subtotal form-control' name='subtotal[]' type='number' readonly></td><td><a class='btn btn-sm btn-danger hapus' style='vertical-align: middle;'><span class='glyphicon glyphicon-minus'></span></a></td></tr>"
             );
             $('.harga').change(function(){
                 var row = $(this).closest('tr');

@@ -13,11 +13,11 @@ class NotaJual extends Model
 
     public function barang()
     {
-    	$this->belongsToMany('App\Barang', 'barang_has_nota_jual', 'barang_kode', 'nota_jual_id')->withPivot('qty', 'harga', 'subtotal');
+    	return $this->belongsToMany('App\Barang', 'barang_has_nota_jual', 'barang_kode', 'nota_jual_id')->withPivot('qty', 'harga', 'subtotal');
     }
 
     public function notaPelunasanJual()
     {
-    	$this->hasOne('App\NotaPelunasanJual', 'nota_jual_nomor');
+    	return $this->hasOne('App\NotaPelunasanJual', 'nota_jual_nomor');
     }
 }

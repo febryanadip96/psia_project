@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::get('pembelian', 'User\PembelianController@index');
 Route::get('pembelian/create', 'User\PembelianController@create');
+Route::post('pembelian', 'User\PembelianController@store');
 Route::get('penjualan', 'User\PenjualanController@index');
 Route::get('laporan', 'User\LaporanController@index');
 

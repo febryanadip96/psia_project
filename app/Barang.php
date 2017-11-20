@@ -15,16 +15,16 @@ class Barang extends Model
 
     public function jenis()
     {
-    	$this->belongsTo('App\Jenis', 'jenis_id');
+    	return $this->belongsTo('App\Jenis', 'jenis_id');
     }
 
     public function notaBeli()
     {
-    	$this->belongsToMany('App\NotaBeli', 'barang_has_nota_beli', 'barang_kode', 'nota_beli_nomor')->withPivot('qty', 'harga', 'subtotal');
+    	return $this->belongsToMany('App\NotaBeli', 'barang_has_nota_beli', 'barang_kode', 'nota_beli_nomor')->withPivot('qty', 'harga', 'subtotal');
     }
 
     public function notaJual()
     {
-    	$this->belongsToMany('App\NotaJual', 'barang_has_nota_jual', 'barang_kode', 'nota_jual_id')->withPivot('qty', 'harga', 'subtotal');
+    	return $this->belongsToMany('App\NotaJual', 'barang_has_nota_jual', 'barang_kode', 'nota_jual_id')->withPivot('qty', 'harga', 'subtotal');
     }
 }

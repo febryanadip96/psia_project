@@ -14,6 +14,6 @@ class Jenis extends Model
 
 	public function jenis()
 	{
-		$this->hasMany('App\Barang', 'jenis_id');
+		return $this->hasMany('App\Barang', 'jenis_id');
 	}
 }

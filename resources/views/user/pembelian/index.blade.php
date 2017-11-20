@@ -23,7 +23,7 @@
                     <td><a>{{$notaBeli->nomor}}</a></td>
                     <td>{{$notaBeli->supplier->nama}}</td>
                     <td>{{Carbon\Carbon::parse($notaBeli->tanggal)->formatLocalized('%A, %d %B %Y')}}</td>
-                    <td>Rp. {{$notaBeli->notaPelunasanBeli->nominal_seharusnya}}</td>
+                    <td>Rp. {{$notaBeli->grand_total}}</td>
                     <td>{{$notaBeli->cara_bayar}}</td>
                     <td>{{$notaBeli->status}}</td>
                     <th><span class="glyphicon glyphicon-file"></span></th>

@@ -14,11 +14,11 @@ class Periode extends Model
 
 	public function akun()
 	{
-		$this->belongsToMany('App\Akun', 'periode_has_akun', 'periode_id', 'akun_nomor')->withPivot('saldo_awal', 'saldo_akhir');
+		return $this->belongsToMany('App\Akun', 'periode_has_akun', 'periode_id', 'akun_nomor')->withPivot('saldo_awal', 'saldo_akhir');
 	}
 
 	public function jurnal()
 	{
-		$this->hasMany('App\Jurnal', 'periode_id');
+		return $this->hasMany('App\Jurnal', 'periode_id');
 	}
 }

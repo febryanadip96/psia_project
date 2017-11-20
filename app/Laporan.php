@@ -16,6 +16,6 @@ class Laporan extends Model
 
 	public function akun()
 	{
-		$this->belongsToMany('App\Akun', 'laporan_has_akun', 'laporan_id', 'akun_nomor');
+		return $this->belongsToMany('App\Akun', 'laporan_has_akun', 'laporan_id', 'akun_nomor');
 	}
 }

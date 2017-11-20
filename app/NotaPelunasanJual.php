@@ -13,11 +13,11 @@ class NotaPelunasanJual extends Model
 
     public function notaJual()
     {
-    	$this->belongsTo('App\NotaJual', 'nota_jual_nomor');
+    	return $this->belongsTo('App\NotaJual', 'nota_jual_nomor');
     }
 
     public function bank()
     {
-    	$this->belongsTo('App\Bank', 'bank_id');
+    	return $this->belongsTo('App\Bank', 'bank_id');
     }
 }

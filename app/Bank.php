@@ -13,11 +13,11 @@ class Bank extends Model
 
     public function notaPelunasanBeli()
     {
-    	$this->hasMany('App\NotaPelunasanBeli', 'bank_id');
+    	return $this->hasMany('App\NotaPelunasanBeli', 'bank_id');
     }
 
     public function notaPelunasanJual()
     {
-    	$this->hasMany('App\NotaPelunasanJual', 'bank_id');
+    	return $this->hasMany('App\NotaPelunasanJual', 'bank_id');
     }
 }

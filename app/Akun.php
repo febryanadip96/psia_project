@@ -15,16 +15,16 @@ class Akun extends Model
 
     public function laporan()
     {
-    	$this->belongsToMany('App\Laporan', 'laporan_has_akun', 'akun_nomor', 'laporan_id');
+    	return $this->belongsToMany('App\Laporan', 'laporan_has_akun', 'akun_nomor', 'laporan_id');
     }
 
     public function jurnal()
     {
-    	$this->belongsToMany('App\Jurnal', 'akun_has_jurnal', 'akun_nomor', 'junal_id')->withPivot('nominal_debet', 'nominal_kredit', 'urutan');
+    	return $this->belongsToMany('App\Jurnal', 'akun_has_jurnal', 'akun_nomor', 'junal_id')->withPivot('nominal_debet', 'nominal_kredit', 'urutan');
     }
 
     public function periode()
     {
-    	$this->belongsToMany('App\Periode', 'periode_has_akun', 'akun_nomor', 'periode_id')->withPivot('saldo_awal', 'saldo_akhir');
+    	return $this->belongsToMany('App\Periode', 'periode_has_akun', 'akun_nomor', 'periode_id')->withPivot('saldo_awal', 'saldo_akhir');
     }
 }

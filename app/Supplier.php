@@ -14,6 +14,6 @@ class Supplier extends Model
 
 	public function notaBeli()
 	{
-		$this->hasMany('App\NotaBeli', 'supplier_id');
+		return $this->hasMany('App\NotaBeli', 'supplier_id');
 	}
 }

@@ -1,4 +1,4 @@
-<?php
+return <?php
 
 namespace App;
 
@@ -14,6 +14,6 @@ class Pelanggan extends Model
 
 	public function notaJual()
 	{
-		$this->hasMany('App\NotaJual', 'pelanggan_id');
+		return $this->hasMany('App\NotaJual', 'pelanggan_id');
 	}
 }
