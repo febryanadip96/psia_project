@@ -48,26 +48,27 @@ class PembelianController extends Controller
             $nomor = $nomor.$jumlah;
         }
         $notaBeli = new NotaBeli();
-        $notaBeli->nomor = 'B'+$nomor;
+        $notaBeli->nomor = 'B'.$nomor;
         $notaBeli->tanggal = $request->tanggal;
         $notaBeli->supplier_id = $request->supplier_id;
         $notaBeli->cara_bayar = $request->cara_bayar;
         $notaBeli->grand_total = $request->grand_total;
         $notaBeli->diskon_langsung = $request->diskon_langsung;
-        if($request->cara_bayar==1){
+        if($request->cara_bayar==1){//tunai
             $notaBeli->status = 2;
-        } else if($request->cara_bayar==2){
+        } else if($request->cara_bayar==2){//transfer
+            $notaBeli->status = 2;
+            $notaBeli->bank_id = $request->bank;
+            $notaBeli->no_rek = $request->no_rek;
+            $notaBeli->nama_pemilik_rek = $request->atas_nama;
+        } else if($request->cara_bayar==3){//kredit
             $notaBeli->status = 1;
             $notaBeli->tgl_jatuh_tempo = $request->tgl_jatuh_tempo;
             $notaBeli->diskon_pelunasan = $request->diskon_pelunasan;
             $notaBeli->tgl_batas_diskon = $request->tgl_batas_diskon;
-        } else if($request->cara_bayar==3){
-            $notaBeli->status = 1;
-            $notaBeli->tgl_jatuh_tempo = $request->tgl_jatuh_tempo;
-            $notaBeli->diskon_pelunasan = $request->diskon_pelunasan;
-            $notaBeli->tgl_batas_diskon = $request->tgl_batas_diskon;
-        } else{
-            //pembelian dengan cek
+        } else{//pembelian dengan cek
+            $notaBeli->status = 2;
+            $notaBeli->no_cek = $request->no_cek;
         }
         //bila pengiriman = 1 tidak ada biaya dan dibayar oleh
         if($request->pengiriman==2){
