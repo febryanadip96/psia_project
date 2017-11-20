@@ -8,7 +8,7 @@ class NotaJual extends Model
 {
     protected $table = 'nota_beli';
     protected $primaryKey = 'nomor';
-	protected $fillable=['nomor', 'tanggal', 'cara_bayar', 'ppn', 'status_kirim', 'tgl_jatuh_tempo', 'diskon_langsung', 'diskon_pelunasan', 'tgl_batas_diskon', 'biaya_kirim', 'grand_total', 'dibayar_oleh', 'status', 'pelanggan_id' ];
+	protected $fillable=['nomor', 'tanggal', 'cara_bayar', 'ppn', 'tgl_jatuh_tempo', 'diskon_langsung', 'diskon_pelunasan', 'tgl_batas_diskon', 'biaya_kirim', 'grand_total', 'dibayar_oleh', 'status', 'pelanggan_id', 'no_cek', 'rekening_perusahaan_id', 'bank_id' ];
     public $timestamps=false;
 
     public function barang()

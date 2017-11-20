@@ -35,7 +35,7 @@ class PembelianController extends Controller
     {
         $tahun = substr(date("Y",strtotime($request->tanggal)), 2);
         $nomor = $tahun.date("md",strtotime($request->tanggal));
-        $jumlah = NotaBeli::where('nomor','like', $nomor.'%')->count()+1;
+        $jumlah = NotaBeli::where('nomor','like', 'B'.$nomor.'%')->count()+1;
         if($jumlah<10){
             $nomor = $nomor."00".$jumlah;
         }
@@ -48,7 +48,7 @@ class PembelianController extends Controller
             $nomor = $nomor.$jumlah;
         }
         $notaBeli = new NotaBeli();
-        $notaBeli->nomor = $nomor;
+        $notaBeli->nomor = 'B'+$nomor;
         $notaBeli->tanggal = $request->tanggal;
         $notaBeli->supplier_id = $request->supplier_id;
         $notaBeli->cara_bayar = $request->cara_bayar;

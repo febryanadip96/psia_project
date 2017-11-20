@@ -8,7 +8,7 @@ class NotaPelunasanJual extends Model
 {
     protected $table = 'nota_pelunasan_penjualan';
     protected $primaryKey = 'nomor';
-	protected $fillable=['nomor', 'tanggal', 'nominal_seharusnya', 'diskon_pelunasan', 'nominal_bayar', 'no_cek', 'rekening_perusahaan_id', 'nota_jual_nomor', 'bank_id'];
+	protected $fillable=['nomor', 'tanggal', 'nominal_seharusnya', 'nota_jual_nomor', 'nominal_bayar', 'diskon_pelunasan'];
     public $timestamps=false;
 
     public function notaJual()

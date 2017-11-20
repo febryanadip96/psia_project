@@ -61,10 +61,10 @@
                     <label><input type="radio" name="cara_bayar" value="1" id="tunai" checked>Tunai</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="cara_bayar" value="2" id="kredit">Kredit</label>
+                    <label><input type="radio" name="cara_bayar" value="2" id="transfer">Transfer</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="cara_bayar" value="3" id="transfer">Transfer</label>
+                    <label><input type="radio" name="cara_bayar" value="3" id="kredit">Kredit</label>
                 </div>
                 <div class="radio">
                     <label><input type="radio" name="cara_bayar" value="4" id="cek">Cek</label>

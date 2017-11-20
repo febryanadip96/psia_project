@@ -8,7 +8,7 @@ class NotaPelunasanBeli extends Model
 {
     protected $table = 'nota_pelunasan_pembelian';
     protected $primaryKey = 'nomor';
-	protected $fillable=['nomor', 'tanggal', 'nominal_seharusnya', 'diskon_pelunasan', 'nominal_bayar', 'bank_id', 'nota_beli_nomor', 'no_rek', 'nama_pemilik_rek', 'no_cek'];
+	protected $fillable=['nomor', 'tanggal', 'nominal_seharusnya', 'diskon_pelunasan', 'nominal_bayar', 'nota_beli_nomor'];
     public $timestamps=false;
 
     public function notaBeli()
