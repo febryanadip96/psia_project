@@ -85,13 +85,13 @@ class PembelianController extends Controller
 
         foreach ($barangs as $key => $barang) {
             $notaBeli->barang()->attach($barang, ['qty' => $qtys[$key], 'harga' => $hargas[$key], 'subtotal' => $subtotals[$key]]);
-            $barang = $notaBeli->barang->where('kode', $barang)->first();
+            $barang = Barang::where('kode', $barang)->first();
             $barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]))/($barang->stok+$qtys[$key]);
             $barang->stok += $qtys[$key];
             $barang->save();
         }
 
         return redirect()->action('User\PembelianController@index');
-
     }
 }
+

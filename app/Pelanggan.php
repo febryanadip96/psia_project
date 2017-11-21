@@ -1,4 +1,4 @@
-return <?php
+<?php
 
 namespace App;
 

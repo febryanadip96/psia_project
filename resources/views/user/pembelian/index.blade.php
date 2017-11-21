@@ -26,7 +26,14 @@
                     <td>Rp. {{$notaBeli->grand_total}}</td>
                     <td>{{$notaBeli->cara_bayar}}</td>
                     <td>{{$notaBeli->status}}</td>
-                    <th><span class="glyphicon glyphicon-file"></span></th>
+                    <td>
+                        @if($notaBeli->status!='Lunas')
+                            <a href="{{url('pembelian/pelunasan/'.$notaBeli->nomor)}}"><span class="glyphicon glyphicon-file"></span></a>
+                        @endif
+                        @if($notaBeli->status=='Lunas' && $notaBeli->cara_bayar == 'kredit')
+                            <a href="{{url('pembelian/pelunasan/'.$notaBeli->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
             
