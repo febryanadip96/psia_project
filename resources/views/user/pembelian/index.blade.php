@@ -20,7 +20,7 @@
         <tbody>
             @foreach($notaBelis as $notaBeli)
                 <tr>
-                    <td><a>{{$notaBeli->nomor}}</a></td>
+                    <td>{{$notaBeli->nomor}}</td>
                     <td>{{$notaBeli->supplier->nama}}</td>
                     <td>{{Carbon\Carbon::parse($notaBeli->tanggal)->formatLocalized('%A, %d %B %Y')}}</td>
                     <td>Rp. {{$notaBeli->grand_total}}</td>

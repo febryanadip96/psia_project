@@ -17,10 +17,10 @@
             <div class="col-sm-10"> 
                 <select class="form-control" id="supplier" name="supplier_id" required>
                     @foreach($suppliers as $supplier)
-                        <option value="{{$supplier->id}}">{{$supplier->nama}}</option>
+                        <option value="{{$supplier->id}}" alamat="{{$supplier->alamat}}">{{$supplier->nama}}</option>
                     @endforeach
                 </select><br>
-                <p>Alamat:<span id="alamat"></span></p>
+                <p>Alamat: <span id="alamat"></span></p>
             </div>
         </div>
         <table class="table table-striped">
@@ -152,6 +152,9 @@
 
 <script>
     $(function(){
+        $('#supplier').change(function(){
+            $('#alamat').html($(this).find('option:selected').attr('alamat'));
+        });
         $('#tunai').change(function(){
             $('#bank').attr('disabled',true);
             $('#no_rek').attr('disabled',true);

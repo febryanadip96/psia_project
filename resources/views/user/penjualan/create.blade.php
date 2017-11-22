@@ -17,10 +17,10 @@
             <div class="col-sm-10"> 
                 <select class="form-control" id="pelanggan" name="pelanggan_id" required>
                     @foreach($pelanggans as $pelanggan)
-                        <option value="{{$pelanggan->id}}">{{$pelanggan->nama}}</option>
+                        <option value="{{$pelanggan->id}}" alamat="{{$pelanggan->alamat}}">{{$pelanggan->nama}}</option>
                     @endforeach
                 </select><br>
-                <p>Alamat:<span id="alamat"></span></p>
+                <p>Alamat: <span id="alamat"></span></p>
             </div>
         </div>
         <table class="table table-striped">
@@ -88,7 +88,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="no_rek">No. Rekening Tujuan:</label>
+            <label class="control-label col-sm-2" for="no_rek">No. Rekening:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="no_rek" id="no_rek" placeholder="Nomor Rekening" disabled>
             </div>
@@ -145,10 +145,10 @@
             <label class="control-label col-sm-2" for="dibayar_oleh">Dibayar Oleh:</label>
             <div class="col-sm-10"> 
                 <div class="radio">
-                    <label><input type="radio" id="dibayar_perusahaan" name="dibayar_oleh" value="1" checked disabled>Perusahaan</label>
+                    <label><input type="radio" id="dibayar_perusahaan" name="dibayar_oleh" value="1" checked disabled>Pelanggan</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" id="dibayar_supplier" name="dibayar_oleh" value="2" disabled>Supplier</label>
+                    <label><input type="radio" id="dibayar_supplier" name="dibayar_oleh" value="2" disabled>Perusahaan</label>
                 </div>
             </div>
         </div>
@@ -158,6 +158,9 @@
 
 <script>
     $(function(){
+        $('#pelanggan').change(function(){
+            $('#alamat').html($(this).find('option:selected').attr('alamat'));
+        });
         $('#tunai').change(function(){
             $('#bank').attr('disabled',true);
             $('#no_rek').attr('disabled',true);
