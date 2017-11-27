@@ -8,6 +8,7 @@ use App\Barang;
 use App\Supplier;
 use App\Bank;
 use App\NotaBeli;
+use App\JasaPengiriman;
 use Carbon\Carbon;
 
 class PembelianController extends Controller
@@ -28,7 +29,8 @@ class PembelianController extends Controller
     	$barangs = Barang::all();
         $suppliers = Supplier::all();
         $banks = Bank::all();
-    	return view('user.pembelian.create', ['barangs' => $barangs, 'suppliers' => $suppliers, 'banks' => $banks]);
+        $jasa_pengirimans = JasaPengiriman::all();
+    	return view('user.pembelian.create', ['barangs' => $barangs, 'suppliers' => $suppliers, 'banks' => $banks, 'jasa_pengirimans'=> $jasa_pengirimans]);
     }
 
     public function store(Request $request)
@@ -74,6 +76,7 @@ class PembelianController extends Controller
         if($request->pengiriman==2){
             $notaBeli->biaya_kirim = $request->biaya_kirim;
             $notaBeli->dibayar_oleh = $request->pengiriman;
+            $notaBeli->jasa_pengiriman_id = $request->jasa_pengiriman_id;
         }
 
         $notaBeli->save();

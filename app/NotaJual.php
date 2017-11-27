@@ -27,4 +27,9 @@ class NotaJual extends Model
     {
         return $this->belongsTo('App\Pelanggan', 'pelanggan_id');
     }
+
+    public function jasaPengiriman()
+    {
+        return $this->belongsTo('App\JasaPengiriman', 'jasa_pengiriman_id');
+    }
 }

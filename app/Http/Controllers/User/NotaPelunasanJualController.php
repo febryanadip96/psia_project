@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\NotaJual;
 use App\NotaPelunasanJual;
+use App\Bank;
 
 class NotaPelunasanJualController extends Controller
 {
@@ -17,7 +18,8 @@ class NotaPelunasanJualController extends Controller
     public function pelunasan($id)
     {
     	$notaJual = NotaJual::find($id);
-    	return view('user.penjualan.pelunasan', ['notaJual' => $notaJual]);
+        $banks = Bank::all();
+    	return view('user.penjualan.pelunasan', ['notaJual' => $notaJual, 'banks' => $banks]);
     }
 
     public function simpan(Request $request)

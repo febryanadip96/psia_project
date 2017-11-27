@@ -33,6 +33,15 @@
                         @if($notaBeli->status=='Lunas' && $notaBeli->cara_bayar == 'kredit')
                             <a href="{{url('pembelian/pelunasan/'.$notaBeli->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
                         @endif
+                        @if($notaBeli->status=='Lunas' && $notaBeli->cara_bayar == 'tunai')
+                            <a href="{{url('pembelian/pelunasan/'.$notaBeli->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                        @endif
+                        @if($notaBeli->status=='Lunas' && $notaBeli->cara_bayar == 'cek')
+                            <a href="{{url('pembelian/pelunasan/'.$notaBeli->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                        @endif
+                        @if($notaBeli->status=='Lunas' && $notaBeli->cara_bayar == 'transfer')
+                            <a href="{{url('pembelian/pelunasan/'.$notaBeli->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

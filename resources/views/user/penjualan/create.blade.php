@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="tanggal">Tanggal:</label>
             <div class="col-sm-10"> 
-                <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+                <input type="date" class="form-control" name="tanggal" id="tanggal" value="{{\Carbon\Carbon::now()->format('Y-m-d')}}" readonly>
             </div>
         </div>
         <div class="form-group">
@@ -43,21 +43,33 @@
             </tfoot>
         </table>
         <div class="form-group">
+            <label class="control-label col-sm-2" for="total">Total:</label>
+            <div class="col-sm-10"> 
+                <input id="total" class="form-control" name="total" type="number" value="0" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="diskon_langsung">Diskon Langsung:</label>
+            <div class="col-sm-10"> 
+                <div class="input-group">
+                    <input id="diskon_langsung" class="form-control" name="diskon_langsung" value="0" type="number">
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-sm-2" for="ppn">PPN :</label>
             <div class="col-sm-10"> 
-                <input id="ppn" class="form-control" name="ppn" value="0" type="number" readonly>
+                <div class="input-group">
+                    <input id="ppn" class="form-control" name="ppn" value="0" type="number">
+                    <span class="input-group-addon">%</span>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="grand_total">Grand Total:</label>
             <div class="col-sm-10"> 
                 <input id="grand_total" class="form-control" name="grand_total" type="number" value="0" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="diskon_langsung">Diskon Langsung:</label>
-            <div class="col-sm-10"> 
-                <input id="diskon_langsung" class="form-control" name="diskon_langsung" value="0" type="number">
             </div>
         </div>
         <div class="form-group">
@@ -115,7 +127,10 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="diskon_pelunasan">Diskon Pelunasan:</label>
             <div class="col-sm-10"> 
-                <input id="diskon_pelunasan" class="form-control" name="diskon_pelunasan" type="number" disabled>
+                <div class="input-group">
+                    <input id="diskon_pelunasan" class="form-control" name="diskon_pelunasan" value="0" type="number" disabled>
+                    <span class="input-group-addon">%</span>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -133,6 +148,16 @@
                 <div class="radio">
                     <label><input type="radio" id="dikirim" name="pengiriman" value="2">Dikirim</label>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="jasa_pengiriman">Jasa Pengiriman :</label>
+            <div class="col-sm-10"> 
+                <select class="form-control" id="jasa_pengiriman" name="jasa_pengiriman_id" required disabled>
+                    @foreach($jasa_pengirimans as $jasa_pengiriman)
+                        <option value="{{$jasa_pengiriman->id}}" alamat="{{$jasa_pengiriman->alamat}}">{{$jasa_pengiriman->nama}}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -201,11 +226,13 @@
             $('#biaya_kirim').attr('disabled', true);
             $('#dibayar_perusahaan').attr('disabled', true);
             $('#dibayar_supplier').attr('disabled', true);
+            $('#jasa_pengiriman').attr('disabled', true);
         });
         $('#dikirim').change(function(){
             $('#biaya_kirim').attr('disabled', false);
             $('#dibayar_perusahaan').attr('disabled', false);
             $('#dibayar_supplier').attr('disabled', false);
+            $('#jasa_pengiriman').attr('disabled', false);
         });
         $('#tambah').on('click', function(){
             $('#tabel-barang').append("<tr class='item'><td><select name='barang[]' class='form-control'><option></option>"+
@@ -231,20 +258,31 @@
             $('.hapus').on('click', function(){
                 $(this).closest('tr').remove();
                 hitungGrandTotal();
+                hitungTotal();
             });
-            $('.harga, .qty').change(function(){
+            $('.harga, .qty, #diskon_langsung, #ppn').change(function(){
                 hitungGrandTotal();
+                hitungTotal();
             });
+            function hitungTotal(){
+                var total = 0;
+                $('.item').each(function(){
+                    total += Number($(this).find('.subtotal').val());
+                });
+                total = parseInt(total);
+                $('#total').val(total);
+            }
             function hitungGrandTotal(){
                 var grand_total = 0;
-                var ppn = 0;
+                var ppn = Number($('#ppn').val());
                 $('.item').each(function(){
                     grand_total += Number($(this).find('.subtotal').val());
                 });
                 grand_total = parseInt(grand_total);
-                ppn = grand_total/10;
-                grand_total += ppn;
-                $('#grand_total').val(grand_total);
+                var diskon_langsung = Number($('#diskon_langsung').val());
+                grand_total *= (100-diskon_langsung)/100;
+                grand_total *= (100+ppn)/100;
+                $('#grand_total').val(grand_total.toFixed(3));
                 $('#ppn').val(ppn);
             }
         });

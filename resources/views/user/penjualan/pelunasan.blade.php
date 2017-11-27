@@ -27,13 +27,61 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="diskon_pelunasan">Diskon Pelunasan:</label>
             <div class="col-sm-10"> 
-                <input id="diskon_pelunasan" class="form-control" name="diskon_pelunasan" value="0" type="number" readonly>
+                <div class="input-group">
+                    <input id="diskon_pelunasan" class="form-control" name="diskon_pelunasan" value="{{$notaJual->diskon_pelunasan}}" type="number" readonly>
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="cara_bayar">Cara Bayar:</label>
+            <div class="col-sm-10"> 
+                <div class="radio">
+                    <label><input type="radio" name="cara_bayar" value="1" id="tunai" checked>Tunai</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="cara_bayar" value="2" id="transfer">Transfer</label>
+                </div>
+                <!-- <div class="radio">
+                    <label><input type="radio" name="cara_bayar" value="3" id="kredit">Kredit</label>
+                </div> -->
+                <div class="radio">
+                    <label><input type="radio" name="cara_bayar" value="4" id="cek">Cek</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="bank">Nama Bank:</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="bank" name="bank" disabled>
+                    @foreach($banks as $bank)
+                        <option value="{{$bank->id}}">{{$bank->nama}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="no_rek">No. Rekening Tujuan:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="no_rek" id="no_rek" placeholder="Nomor Rekening" disabled>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="atas_nama">Atas Nama:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="atas_nama" id="atas_nama" placeholder="Atas Nama" disabled>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="no_cek">No. Cek:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="no_cek" id="no_cek" placeholder="Nomor Cek" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="nominal_bayar">Nominal Bayar:</label>
             <div class="col-sm-10"> 
-                <input id="nominal_bayar" class="form-control" name="nominal_bayar" value="0" type="number">
+                <input id="nominal_bayar" class="form-control" name="nominal_bayar" value="{{$notaJual->grand_total}}" type="number" readonly>
             </div>
         </div>
         <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-floppy-disk"></span> Simpan</button>
@@ -46,11 +94,47 @@
             var jatuh_tempo = new Date('{{$notaJual->tgl_batas_diskon}}');
             var hari_ini = new Date($(this).val());
             if(hari_ini<=jatuh_tempo){
-                $('#diskon_pelunasan').val({{$notaJual->grand_total*$notaJual->diskon_pelunasan/100}});
+                $('#nominal_bayar').val({{$notaJual->grand_total*(100-$notaJual->diskon_pelunasan)/100}});
             }
             else{
-                $('#diskon_pelunasan').val(0);
+                $('#nominal_bayar').val({{$notaJual->grand_total}});
             }
+        });
+        $('#tunai').change(function(){
+            $('#bank').attr('disabled',true);
+            $('#no_rek').attr('disabled',true);
+            $('#no_cek').attr('disabled',true);
+            $('#atas_nama').attr('disabled',true);
+            $('#tgl_jatuh_tempo').attr('disabled', true);
+            $('#diskon_pelunasan').attr('disabled', true);
+            $('#tgl_batas_diskon').attr('disabled', true);
+        });
+        $('#kredit').change(function(){
+            $('#bank').attr('disabled',true);
+            $('#no_rek').attr('disabled',true);
+            $('#no_cek').attr('disabled',true);
+            $('#atas_nama').attr('disabled',true);
+            $('#tgl_jatuh_tempo').attr('disabled', false);
+            $('#diskon_pelunasan').attr('disabled', false);
+            $('#tgl_batas_diskon').attr('disabled', false);
+        });
+        $('#transfer').change(function(){
+            $('#bank').attr('disabled',false);
+            $('#no_rek').attr('disabled',false);
+            $('#no_cek').attr('disabled',true);
+            $('#atas_nama').attr('disabled',false);
+            $('#tgl_jatuh_tempo').attr('disabled', true);
+            $('#diskon_pelunasan').attr('disabled', true);
+            $('#tgl_batas_diskon').attr('disabled', true);
+        });
+        $('#cek').change(function(){
+            $('#bank').attr('disabled',false);
+            $('#no_rek').attr('disabled',true);
+            $('#no_cek').attr('disabled',false);
+            $('#atas_nama').attr('disabled',true);
+            $('#tgl_jatuh_tempo').attr('disabled', true);
+            $('#diskon_pelunasan').attr('disabled', true);
+            $('#tgl_batas_diskon').attr('disabled', true);
         });
     });
     

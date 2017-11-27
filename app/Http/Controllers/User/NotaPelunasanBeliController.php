@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\NotaBeli;
 use App\NotaPelunasanBeli;
+use App\Bank;
 
 class NotaPelunasanBeliController extends Controller
 {
@@ -17,7 +18,8 @@ class NotaPelunasanBeliController extends Controller
     public function pelunasan($id)
     {
     	$notaBeli = NotaBeli::find($id);
-    	return view('user.pembelian.pelunasan', ['notaBeli' => $notaBeli]);
+        $banks = Bank::all();
+    	return view('user.pembelian.pelunasan', ['notaBeli' => $notaBeli, 'banks' => $banks]);
     }
 
     public function simpan(Request $request)
@@ -43,6 +45,12 @@ class NotaPelunasanBeliController extends Controller
     	$notapelunasanbeli->nominal_seharusnya = $request->nominal_seharusnya;
     	$notapelunasanbeli->diskon_pelunasan = $request->diskon_pelunasan;
     	$notapelunasanbeli->nominal_bayar = $request->nominal_bayar;
+        $notapelunasanbeli->cara_bayar = $request->cara_bayar;
+        $notapelunasanbeli->bank_id = $request->bank_id;
+        $notapelunasanbeli->no_rek = $request->no_rek;
+        $notapelunasanbeli->pemilik_no_rek = $request->pemilik_no_rek;
+        $notapelunasanbeli->no_cek = $request->no_cek;
+
 
     	NotaBeli::where('nomor', $request->nomor_nota)->update(['status' => 2]);
 

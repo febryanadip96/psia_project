@@ -27,4 +27,9 @@ class NotaBeli extends Model
     {
     	return $this->belongsToMany('App\Barang', 'barang_has_nota_beli', 'nota_beli_nomor', 'barang_kode')->withPivot('qty','harga','subtotal');
     }
+
+    public function jasaPengiriman()
+    {
+        return $this->belongsTo('App\JasaPengiriman', 'jasa_pengiriman_id');
+    }
 }

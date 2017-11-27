@@ -8,6 +8,7 @@ use App\NotaJual;
 use App\Pelanggan;
 use App\Bank;
 use App\Barang;
+use App\JasaPengiriman;
 
 class PenjualanController extends Controller
 {
@@ -27,7 +28,8 @@ class PenjualanController extends Controller
     	$pelanggans = Pelanggan::all();
     	$banks = Bank::all();
     	$barangs = Barang::all();
-    	return view('user.penjualan.create', ['pelanggans' => $pelanggans, 'banks' => $banks, 'barangs' => $barangs]);
+        $jasa_pengirimans = JasaPengiriman::all();
+    	return view('user.penjualan.create', ['pelanggans' => $pelanggans, 'banks' => $banks, 'barangs' => $barangs, 'jasa_pengirimans'=> $jasa_pengirimans]);
 
     }
 
@@ -54,6 +56,7 @@ class PenjualanController extends Controller
     	$notaJual->pelanggan_id = $request->pelanggan_id;
     	$notaJual->ppn = $request->ppn;
 		$notaJual->grand_total=$request->grand_total;
+
 		if($request->cara_bayar==1){//tunai
             $notaJual->status = 2;
         } else if($request->cara_bayar==2){//transfer
@@ -74,6 +77,7 @@ class PenjualanController extends Controller
         if($request->pengiriman==2){
             $notaJual->biaya_kirim = $request->biaya_kirim;
             $notaJual->dibayar_oleh = $request->pengiriman;
+            $notaJual->jasa_pengiriman_id = $request->jasa_pengiriman_id;
         }
 
         $notaJual->save();
