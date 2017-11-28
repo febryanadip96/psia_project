@@ -45,6 +45,12 @@ class NotaPelunasanJualController extends Controller
     	$notaPelunasanJual->nominal_seharusnya = $request->nominal_seharusnya;
     	$notaPelunasanJual->diskon_pelunasan = $request->diskon_pelunasan;
     	$notaPelunasanJual->nominal_bayar = $request->nominal_bayar;
+        $notaPelunasanJual->cara_bayar = $request->cara_bayar;
+        $notaPelunasanJual->bank_id = $request->bank_id;
+        $notaPelunasanJual->no_rek = $request->no_rek;
+        $notaPelunasanJual->pemilik_no_rek = $request->pemilik_no_rek;
+        $notaPelunasanJual->no_cek = $request->no_cek;
+
 
     	NotaJual::where('nomor', $request->nomor_nota)->update(['status' => 2]);
 

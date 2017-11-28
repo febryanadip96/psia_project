@@ -10,6 +10,9 @@ use App\Bank;
 use App\NotaBeli;
 use App\JasaPengiriman;
 use Carbon\Carbon;
+use App\Jurnal;
+use App\Periode;
+use App\Akun;
 
 class PembelianController extends Controller
 {
@@ -79,6 +82,7 @@ class PembelianController extends Controller
             $notaBeli->jasa_pengiriman_id = $request->jasa_pengiriman_id;
         }
 
+
         $notaBeli->save();
 
         $barangs = $request->barang;
@@ -87,12 +91,139 @@ class PembelianController extends Controller
         $subtotals = $request->subtotal;
 
         foreach ($barangs as $key => $barang) {
-            $notaBeli->barang()->attach($barang, ['qty' => $qtys[$key], 'harga' => $hargas[$key], 'subtotal' => $subtotals[$key]]);
+            $notaBeli->barang()->attach($barang, ['qty' => $qtys[$key], 'harga' => $hargas[$key], 'subtotal' => $subtotals[$key]*(100-$notaBeli->diskon_langsung)/100]);
             $barang = Barang::where('kode', $barang)->first();
-            $barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]))/($barang->stok+$qtys[$key]);
+            $barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]*(100-$notaBeli->diskon_langsung)/100))/($barang->stok+$qtys[$key]);
             $barang->stok += $qtys[$key];
             $barang->save();
         }
+
+
+        //jurnal
+        $jurnal = new Jurnal();
+        $jurnal->tanggal = $notaBeli->tanggal;
+        $jurnal->no_bukti = $notaBeli->nomor;
+        $jurnal->jenis = 1;
+        $keterangan = "";
+        if($notaBeli->cara_bayar == 1){//tunai
+            $keterangan = "Transaksi Pembelian Tunai";
+        }
+        else if($notaBeli->cara_bayar == 2){ //transfer
+            $keterangan = "Transaksi Pembelian Transfer ke ".$notaBeli->bank->nama;
+        }
+        else if($notaBeli->cara_bayar == 3){//kredit
+            $keterangan = "Transaksi Pembelian Kredit";
+        }
+        else{ //cek
+            $keterangan = "Transaksi Pembelian Cek";
+        }
+
+        if($notaBeli->diskon_langsung){
+            $keterangan .= " dengan diskon pembayaran";
+        }
+
+        if($request->pengiriman == 2){
+            if($notaBeli->dibayar_oleh == 1){
+                $keterangan .= " - FOB Shipping Point";
+            }
+            else{
+                $keterangan .= " - FOB Destination Point";
+            }
+        }
+        $jurnal->keterangan = $keterangan;
+
+        $periodeAktif = Periode::where('tgl_awal', '<=', $notaBeli->tanggal)->where('tgl_akhir', '>=', $notaBeli->tanggal)->first();
+        $jurnal->periode_id = $periodeAktif->id;
+        $jurnal->save();
+
+        //akun has jurnal
+        $urutan = 1;
+        $alat_tulis = 0;
+        $rumah_tangga = 0;
+        foreach ($barangs as $key => $barang) {
+            $barang = Barang::find($barang);
+            if($barang->jenis_id == 1){
+                $alat_tulis += $subtotals[$key]*(100-$notaBeli->diskon_langsung)/100;
+            }
+            else{
+                $rumah_tangga += $subtotals[$key]*(100-$notaBeli->diskon_langsung)/100;
+            }
+        }
+        if($alat_tulis != 0){
+            $akun = Akun::find('106');
+            $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $alat_tulis, 'nominal_kredit' => 0]);
+            $urutan++;
+        }
+        if($rumah_tangga != 0){
+            $akun = Akun::find('107');
+            $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $rumah_tangga, 'nominal_kredit' => 0]);
+            $urutan++;
+        }
+
+        if($notaBeli->cara_bayar == 1){//tunai
+            $akun = Akun::find('101');
+            $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->grand_total]);
+        }
+        else if($notaBeli->cara_bayar == 2){//transfer
+            if($notaBeli->bank_id == 1){//bank baca-baca
+                $akun = Akun::find('102');
+            }
+            else{//bank suka sendiri
+                $akun = Akun::find('103');
+            }
+            $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->grand_total]);
+        }
+        else if($notaBeli->cara_bayar == 3){//kredit
+            $akun = Akun::find('201');
+            $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->grand_total]);
+        }
+        else if($notaBeli->cara_bayar == 4){//cek
+            $akun = Akun::find('203');
+            $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->grand_total]);
+        }
+        $urutan++;
+
+        if($request->dibayar_oleh == 1){
+            if($alat_tulis !=0 && $rumah_tangga !=0){
+                $akun = Akun::find('106');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $notaBeli->biaya_kirim/2, 'nominal_kredit' => 0]);
+                $urutan++;
+                $akun = Akun::find('107');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $notaBeli->biaya_kirim/2, 'nominal_kredit' => 0]);
+            }
+            else if($alat_tulis != 0){
+                $akun = Akun::find('106');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $notaBeli->biaya_kirim, 'nominal_kredit' => 0]);
+            }
+            else{
+                $akun = Akun::find('107');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $notaBeli->biaya_kirim, 'nominal_kredit' => 0]);
+            }
+            $urutan++;
+
+            if($notaBeli->cara_bayar == 1){//tunai
+                $akun = Akun::find('101');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->biaya_kirim]);
+            }
+            else if($notaBeli->cara_bayar == 2){//transfer
+                if($notaBeli->bank_id == 1){
+                    $akun = Akun::find('102');
+                }
+                else{
+                    $akun = Akun::find('103');
+                }
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->biaya_kirim]);
+            }
+            else if($notaBeli->cara_bayar == 3){//kredit
+                $akun = Akun::find('201');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->biaya_kirim]);
+            }
+            else{//cek
+                $akun = Akun::find('203');
+                $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->biaya_kirim]);
+            }
+        }
+
 
         return redirect()->action('User\PembelianController@index');
     }

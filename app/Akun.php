@@ -20,7 +20,7 @@ class Akun extends Model
 
     public function jurnal()
     {
-    	return $this->belongsToMany('App\Jurnal', 'akun_has_jurnal', 'akun_nomor', 'junal_id')->withPivot('nominal_debet', 'nominal_kredit', 'urutan');
+    	return $this->belongsToMany('App\Jurnal', 'akun_has_jurnal', 'akun_nomor', 'jurnal_id')->withPivot('nominal_debet', 'nominal_kredit', 'urutan');
     }
 
     public function periode()

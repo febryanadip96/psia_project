@@ -32,4 +32,9 @@ class NotaJual extends Model
     {
         return $this->belongsTo('App\JasaPengiriman', 'jasa_pengiriman_id');
     }
+
+    public function bank()
+    {
+        return $this->belongsTo('App\Bank', 'bank_id');
+    }
 }
