@@ -10,7 +10,22 @@
 
     <div class="tab-content">
         <div id="pembelian" class="tab-pane fade in active">
-            <h3>Ini Laporan</h3>
+            <h3>Jurnal Umum</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tanggal</th>
+                <th>Keterangan Transaksi</th>
+                <th>Akun</th>
+                <th>Debet</th>
+                <th>Kredit</th>
+                <th>No Bukti</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
         </div>
         <div id="terima" class="tab-pane fade">
             <h3>Terima</h3>

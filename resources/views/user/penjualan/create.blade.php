@@ -214,7 +214,7 @@
             $('#tgl_batas_diskon').attr('disabled', true);
         });
         $('#cek').change(function(){
-            $('#bank').attr('disabled',true);
+            $('#bank').attr('disabled',false);
             $('#no_rek').attr('disabled',true);
             $('#no_cek').attr('disabled',false);
             $('#atas_nama').attr('disabled',true);

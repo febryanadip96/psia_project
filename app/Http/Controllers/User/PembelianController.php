@@ -73,6 +73,7 @@ class PembelianController extends Controller
             $notaBeli->tgl_batas_diskon = $request->tgl_batas_diskon;
         } else{//pembelian dengan cek
             $notaBeli->status = 2;
+            $notaBeli->bank_id = $request->bank;
             $notaBeli->no_cek = $request->no_cek;
         }
         //bila pengiriman = 1 tidak ada biaya dan dibayar oleh
@@ -104,6 +105,8 @@ class PembelianController extends Controller
         $jurnal->tanggal = $notaBeli->tanggal;
         $jurnal->no_bukti = $notaBeli->nomor;
         $jurnal->jenis = 1;
+        $periodeAktif = Periode::where('tgl_awal', '<=', $notaBeli->tanggal)->where('tgl_akhir', '>=', $notaBeli->tanggal)->first();
+        $jurnal->periode_id = $periodeAktif->id;
         $keterangan = "";
         if($notaBeli->cara_bayar == 1){//tunai
             $keterangan = "Transaksi Pembelian Tunai";
@@ -113,13 +116,16 @@ class PembelianController extends Controller
         }
         else if($notaBeli->cara_bayar == 3){//kredit
             $keterangan = "Transaksi Pembelian Kredit";
+            if($notaBeli->diskon_pelunasan){
+                $keterangan .= " - dengan diskon pembayaran";
+            }
         }
         else{ //cek
             $keterangan = "Transaksi Pembelian Cek";
         }
 
         if($notaBeli->diskon_langsung){
-            $keterangan .= " dengan diskon pembayaran";
+            $keterangan .= " - dengan diskon langsung";
         }
 
         if($request->pengiriman == 2){
@@ -131,9 +137,6 @@ class PembelianController extends Controller
             }
         }
         $jurnal->keterangan = $keterangan;
-
-        $periodeAktif = Periode::where('tgl_awal', '<=', $notaBeli->tanggal)->where('tgl_akhir', '>=', $notaBeli->tanggal)->first();
-        $jurnal->periode_id = $periodeAktif->id;
         $jurnal->save();
 
         //akun has jurnal

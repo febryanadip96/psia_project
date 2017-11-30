@@ -64,6 +64,8 @@ class NotaPelunasanBeliController extends Controller
         $jurnal->tanggal = $notaPelunasanBeli->tanggal;
         $jurnal->no_bukti = $notaPelunasanBeli->nomor;
         $jurnal->jenis = 1;
+        $periodeAktif = Periode::where('tgl_awal', '<=', $notaPelunasanBeli->tanggal)->where('tgl_akhir', '>=', $notaPelunasanBeli->tanggal)->first();
+        $jurnal->periode_id = $periodeAktif->id;
         $keterangan = "Pelunasan Transaksi Pembelian ".$notaPelunasanBeli->notaBeli->tanggal;
         if($notaPelunasanBeli->cara_bayar == 1){
             $keterangan .= " dengan tunai";
@@ -74,9 +76,7 @@ class NotaPelunasanBeliController extends Controller
         else{
             $keterangan .= " dengan cek";
         }
-
-        $periodeAktif = Periode::where('tgl_awal', '<=', $notaPelunasanBeli->tanggal)->where('tgl_akhir', '>=', $notaPelunasanBeli->tanggal)->first();
-        $jurnal->periode_id = $periodeAktif->id;
+        $jurnal->keterangan = $keterangan;
         $jurnal->save();
 
         //akun has jurnal
