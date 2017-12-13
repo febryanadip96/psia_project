@@ -34,9 +34,8 @@ Route::post('penjualan/pelunasan', 'User\NotaPelunasanJualController@simpan');
 Route::get('penjualan/pelunasan/{id}/lihat', 'User\NotaPelunasanJualController@lihat');
 
 //laporan
-Route::get('laporan', 'User\LaporanController@index');
+Route::get('laporan/{id?}', 'User\LaporanController@index');
 
 //penutupan
 Route::get('penutupan', 'User\PenutupanController@index');
-
-Route::get('tutup', 'User\PenutupanController@tutup');
+Route::get('penutupan/tutup/{id}', 'User\PenutupanController@tutup');

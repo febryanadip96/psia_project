@@ -2,6 +2,18 @@
 
 @section('content')
 <div class="container">
+
+	<form>
+		<div class="form-group">
+			<label for="periode">Pilih Periode:</label>
+			<select id="periode" class="form-control">
+				@foreach($periodeList as $item)
+					<option value="{{$item->id}}" {{$item->id==$periode->id? 'selected':''}}>{{$item->id}}</option>
+				@endforeach
+			</select>
+		</div>
+	</form>
+
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#laporanJurnal">Laporan Jurnal</a></li>
         <li><a data-toggle="tab" href="#arusKas">Arus Kas</a></li>
@@ -155,4 +167,13 @@
         </div>
     </div>
 </div>
+<script>
+	$(function(){
+		$('#periode').change(function(){
+			var periode = $(this).val();
+			var url = '{{url('laporan')}}';
+			window.location.replace(url+"/"+periode);
+		});
+	});
+</script>
 @endsection

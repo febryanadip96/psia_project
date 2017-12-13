@@ -14,12 +14,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{{$periode->id}}</td>
-                <td>{{\Carbon\Carbon::parse($periode->tgl_awal)->formatLocalized('%A, %d %B %Y')}}</td>
-                <td>{{\Carbon\Carbon::parse($periode->tgl_akhir)->formatLocalized('%A, %d %B %Y')}}</td>
-                <td><a href="{{url('tutup')}}" class="btn btn-danger">Tutup <span class="glyphicon glyphicon-remove"></span></a></td>
-            </tr>
+            @foreach($periodeList as $periode)
+                <tr>
+                    <td>{{$periode->id}}</td>
+                    <td>{{\Carbon\Carbon::parse($periode->tgl_awal)->formatLocalized('%A, %d %B %Y')}}</td>
+                    <td>{{\Carbon\Carbon::parse($periode->tgl_akhir)->formatLocalized('%A, %d %B %Y')}}</td>
+                    <td>
+                        @if(!isset($periode->tutup))
+                            <a href="{{url('penutupan/tutup/'.$periode->id)}}" class="btn btn-danger">Tutup <span class="glyphicon glyphicon-remove"></span></a>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 </div>

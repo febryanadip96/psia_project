@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use App\Akun;
+use App\Helpers\Data;
+use App\Periode;
 
 class LaporanController extends Controller
 {
@@ -14,16 +16,23 @@ class LaporanController extends Controller
     	$this->middleware('auth');
     }
 
-    public function index()
+    public function index($id = null)
     {
+        $periodeList = Periode::all();
     	$akuns = Akun::all();
-    	$laporanJurnals = DB::table('vlaporanjurnal')->get();
-    	$arusKasList = DB::table('varuskas')->get();
-    	$pendapatans = DB::table('vlabarugi')->where('nomor', 'like', '4%')->get();
-    	$biayas = DB::table('vlabarugi')->where('nomor', 'like', '5%')->get();
-    	$perubahaEkuitasList = DB::table('vperubahanEkuitas')->get();
-    	$aktivas = DB::table('vneraca')->where('nomor', 'like', '1%')->get();
-    	$pasivas = DB::table('vneraca')->where('nomor', 'like', '2%')->get();
-    	return view('user.laporan.index',['akuns' => $akuns,'laporanJurnals' => $laporanJurnals, 'arusKasList' => $arusKasList,'perubahaEkuitasList' => $perubahaEkuitasList, 'pendapatans' => $pendapatans, 'biayas' => $biayas, 'aktivas' => $aktivas, 'pasivas' => $pasivas]);
+        if(!isset($id))
+        {
+            $periode = Periode::whereNull('tutup')->first();
+        } else{
+            $periode = Periode::find($id);
+        }
+    	$laporanJurnals = Data::LaporanJurnal($periode->id)->get();
+    	$arusKasList = Data::ArusKas($periode->id)->get();
+    	$pendapatans = Data::LabaRugi($periode->id)->where('nomor', 'like', '4%')->get();
+    	$biayas = Data::LabaRugi($periode->id)->where('nomor', 'like', '5%')->get();
+    	$perubahaEkuitasList = Data::PerubahanEkuitas($periode->id)->get();
+    	$aktivas = Data::Neraca($periode->id)->where('nomor', 'like', '1%')->get();
+    	$pasivas = Data::Neraca($periode->id)->where('nomor', 'like', '2%')->get();
+    	return view('user.laporan.index',['periodeList' => $periodeList, 'periode' => $periode,'akuns' => $akuns,'laporanJurnals' => $laporanJurnals, 'arusKasList' => $arusKasList,'perubahaEkuitasList' => $perubahaEkuitasList, 'pendapatans' => $pendapatans, 'biayas' => $biayas, 'aktivas' => $aktivas, 'pasivas' => $pasivas]);
     }
 }

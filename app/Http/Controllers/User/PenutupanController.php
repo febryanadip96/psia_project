@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use DB;
 use App\Akun;
 use App\Jurnal;
-
+use App\Helpers\Data;
 
 class PenutupanController extends Controller
 {
@@ -20,18 +20,17 @@ class PenutupanController extends Controller
 
     public function index()
     {
-    	$periode = Periode::where('tgl_awal', '<=', Carbon::today()->toDateString())->where('tgl_akhir', '>=', Carbon::today()->toDateString())->first();
-    	return view('user.penutupan.index', ['periode' => $periode]);
+    	$periodeList = Periode::all();
+    	return view('user.penutupan.index', ['periodeList' => $periodeList]);
     }
 
-    public function tutup()
+    public function tutup($id)
     {
-    	//update saldo akhir
-    	$periode = Periode::where('tgl_awal', '<=', Carbon::today()->toDateString())->where('tgl_akhir', '>=', Carbon::today()->toDateString())->first();
+    	//periode yang dipilih
+    	$periode = Periode::find($id);
 
     	//nomor bukti jurnal
-    	$tahun = substr(date("Y",strtotime(Carbon::today()->toDateString())), 2);
-        $nomor = $tahun.date("m",strtotime(Carbon::today()->toDateString()));
+        $nomor = $periode->id;
 
     	//jurnal tutup pendapatan
     	$jurnal = new Jurnal();
@@ -46,7 +45,7 @@ class PenutupanController extends Controller
     	$laba = 0;
     	$urutan = 1;
     	$akunNomorList =  Akun::where('nomor', 'like', '4%')->pluck('nomor');
-    	$akunList = DB::table('vsaldoakhir')->whereIn('nomor', $akunNomorList)->get();
+    	$akunList = Data::SaldoAkhir($periode->id)->whereIn('nomor', $akunNomorList)->get();
     	foreach ($akunList as $item) {
     		$akun = Akun::find($item->nomor);
     		if($akun->saldo_normal == -1){
@@ -77,7 +76,7 @@ class PenutupanController extends Controller
     	$rugi = 0;
     	$urutan = 1;
     	$akunNomorList =  Akun::where('nomor', 'like', '5%')->pluck('nomor');
-    	$akunList = DB::table('vsaldoakhir')->whereIn('nomor', $akunNomorList)->get();
+    	$akunList = Data::SaldoAkhir($periode->id)->whereIn('nomor', $akunNomorList)->get();
     	foreach ($akunList as $item) {
     		$akun = Akun::find($item->nomor);
     		if($akun->saldo_normal == -1){
@@ -130,19 +129,23 @@ class PenutupanController extends Controller
         //modal pemilik
     	$urutan = 1;
         $akun = Akun::find('301');
-    	$akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => DB::table('vsaldoakhir')->where('nomor', '302')->first()->SaldoAkhir, 'nominal_kredit' => 0]);
+    	$akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => Data::SaldoAkhir($periode->id)->where('nomor', '302')->first()->SaldoAkhir, 'nominal_kredit' => 0]);
         $urutan++;
 
         //prive
         $akun = Akun::find('302');
-    	$akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => DB::table('vsaldoakhir')->where('nomor', '302')->first()->SaldoAkhir]);
+    	$akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => Data::SaldoAkhir($periode->id)->where('nomor', '302')->first()->SaldoAkhir]);
         $urutan++;
 
         //isi saldo akhir
-        $akunList = DB::table('vsaldoakhir')->get();
+        $akunList = Data::SaldoAkhir($periode->id)->get();
         foreach ($akunList as $item) {
     		$periode->akun()->updateExistingPivot($item->nomor, ['saldo_akhir' => $item->SaldoAkhir]);
     	}
+
+    	//tutup periode sekarang
+    	$periode->tutup = Carbon::now();
+    	$periode->save();
 
     	//periode baru
     	$periode = new Periode();
@@ -153,12 +156,16 @@ class PenutupanController extends Controller
     	$periode->tgl_akhir = $end->toDateString();
     	$periode->save();
 
-    	//saldo awal periode
-    	$akunList = DB::table('vsaldoakhir')->get();
+        //saldo awal periode
     	foreach ($akunList as $item) {
     		$periode->akun()->attach($item->nomor, ['saldo_awal' => $item->SaldoAkhir, 'saldo_akhir' => 0]);
     	}
 
     	return back();
+    }
+
+    public function lihat($id)
+    {
+    	
     }
 }
