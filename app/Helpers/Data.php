@@ -57,7 +57,8 @@ class Data
             ->join('akun as a', 'ja.akun_nomor', '=', 'a.nomor')
             ->selectRaw('j.tanggal as tanggal, j.keterangan as keterangan, a.nama as NamaAkun, ja.nominal_debet as Debet ,ja.nominal_kredit AS Kredit, j.no_bukti AS NomorBukti',[])
             ->whereRaw('j.periode_id = ?',[$idPeriode])
-            ->orderBy('j.id', 'ja.urutan');
+            ->orderBy('j.id', 'asc')
+            ->orderBy('ja.urutan', 'asc');
         return $hasil;
     }
 
