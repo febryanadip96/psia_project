@@ -46,30 +46,41 @@
 						<td>Rp. {{$laporanJurnal->Kredit?number_format($laporanJurnal->Kredit,0,',','.'):0}}</td>
 						<td>{{$laporanJurnal->NomorBukti?$laporanJurnal->NomorBukti:'-'}}</td>
 					</tr>
-				@endforeach            
+				@endforeach
 		        </tbody>
 		    </table>
         </div>
         <div id="arusKas" class="tab-pane fade">
             <h3>Arus Kas</h3>
-            <table class="table table-striped">
-		        <thead>
-		            <tr>
-		                <th>Nomor</th>
-		                <th>Nama Akun</th>
-		                <th>Saldo Akhir</th>
-		            </tr>
-		        </thead>
-		        <tbody>
-		        @foreach ($arusKasList as $arusKas)
+	        @foreach ($arusKasList as $arusKas)
+				<table class="table .table-striped">
 					<tr>
-						<td>{{$arusKas->nomor}}</td>
-						<td>{{$arusKas->NamaAkun}}</td>
-						<td>Rp. {{$arusKas->SaldoAkhir?number_format($arusKas->SaldoAkhir,0,',','.'):0}}</td>
+						<th>{{$arusKas->nomor}}</th>
+						<th colspan="3">{{$arusKas->NamaAkun}}</th>
 					</tr>
-				@endforeach            
-		        </tbody>
-		    </table>
+					<tr>
+						<td>Tanggal</td>
+						<td>Keterangan</td>
+						<td>Debet</td>
+						<td>Kredit</td>
+						<td>Nomor Bukti</td>
+					</tr>
+				@foreach($bukuBesar->where('akun_nomor', $arusKas->nomor) as $item)
+					<tr>
+						<td>{{\Carbon\Carbon::parse($item->tanggal)->formatLocalized('%A, %d %B %Y')}}</td>
+						<td>{{$item->keterangan}}</td>
+						<td>Rp. {{$arusKas->SaldoAkhir?number_format($item->nominal_debet,0,',','.'):0}}</td>
+						<td>Rp. {{$arusKas->SaldoAkhir?number_format($item->nominal_kredit,0,',','.'):0}}</td>
+						<td>{{$item->no_bukti}}</td>
+					</tr>
+				@endforeach
+					<tr>
+						<th colspan="2">Total</th>
+						<th>Rp. {{$arusKas->SaldoAkhir?number_format($arusKas->SaldoAkhir,0,',','.'):0}}</th>
+						<th></th>
+					</tr>
+			</table>
+			@endforeach
         </div>
         <div id="laporanLabaRugi" class="tab-pane fade">
             <h3>Laporan Laba Rugi</h3>
@@ -163,7 +174,7 @@
 				@endphp
 				<p class="col-xs-4"><b>TOTAL PASIVA</b></p>
 				<p class="col-xs-8"><b>Rp. {{$totalPasiva?number_format($totalPasiva,0,',','.'):0}}</b></p>
-        	</div> 
+        	</div>
         </div>
     </div>
 </div>

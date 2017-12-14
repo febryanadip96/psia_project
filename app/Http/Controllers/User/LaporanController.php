@@ -28,11 +28,12 @@ class LaporanController extends Controller
         }
     	$laporanJurnals = Data::LaporanJurnal($periode->id)->get();
     	$arusKasList = Data::ArusKas($periode->id)->get();
+		$bukuBesar = Data::BukuBesar($periode->id)->get();
     	$pendapatans = Data::LabaRugi($periode->id)->where('nomor', 'like', '4%')->get();
     	$biayas = Data::LabaRugi($periode->id)->where('nomor', 'like', '5%')->get();
     	$perubahaEkuitasList = Data::PerubahanEkuitas($periode->id)->get();
     	$aktivas = Data::Neraca($periode->id)->where('nomor', 'like', '1%')->get();
     	$pasivas = Data::Neraca($periode->id)->where('nomor', 'like', '2%')->get();
-    	return view('user.laporan.index',['periodeList' => $periodeList, 'periode' => $periode,'akuns' => $akuns,'laporanJurnals' => $laporanJurnals, 'arusKasList' => $arusKasList,'perubahaEkuitasList' => $perubahaEkuitasList, 'pendapatans' => $pendapatans, 'biayas' => $biayas, 'aktivas' => $aktivas, 'pasivas' => $pasivas]);
+    	return view('user.laporan.index',['periodeList' => $periodeList, 'periode' => $periode,'akuns' => $akuns,'laporanJurnals' => $laporanJurnals, 'arusKasList' => $arusKasList, 'bukuBesar' => $bukuBesar,'perubahaEkuitasList' => $perubahaEkuitasList, 'pendapatans' => $pendapatans, 'biayas' => $biayas, 'aktivas' => $aktivas, 'pasivas' => $pasivas]);
     }
 }
