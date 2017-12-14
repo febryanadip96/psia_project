@@ -93,7 +93,7 @@ class PembelianController extends Controller
 
 		$biaya_kirim_per_barang = 0;
 		if($request->pengiriman == 2){
-			$biaya_kirim_per_barang = $notaBeli->biaya_kirim/$barangs->count();
+			$biaya_kirim_per_barang = $notaBeli->biaya_kirim/count($barangs);
 		}
 
         foreach ($barangs as $key => $barang) {
