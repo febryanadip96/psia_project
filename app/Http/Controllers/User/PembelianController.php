@@ -91,10 +91,15 @@ class PembelianController extends Controller
         $qtys = $request->qty;
         $subtotals = $request->subtotal;
 
+		$biaya_kirim_per_barang = 0;
+		if($request->pengiriman == 2){
+			$biaya_kirim_per_barang = $notaBeli->biaya_kirim/$barangs->count();
+		}
+
         foreach ($barangs as $key => $barang) {
-            $notaBeli->barang()->attach($barang, ['qty' => $qtys[$key], 'harga' => $hargas[$key], 'subtotal' => $subtotals[$key]*(100-$notaBeli->diskon_langsung)/100]);
+			$notaBeli->barang()->attach($barang, ['qty' => $qtys[$key], 'harga' => $hargas[$key], 'subtotal' => $subtotals[$key]*(100-$notaBeli->diskon_langsung)/100]);
             $barang = Barang::where('kode', $barang)->first();
-            $barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]*(100-$notaBeli->diskon_langsung)/100))/($barang->stok+$qtys[$key]);
+			$barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]*(100-$notaBeli->diskon_langsung)/100))/($barang->stok+$qtys[$key])+$biaya_kirim_per_barang;
             $barang->stok += $qtys[$key];
             $barang->save();
         }
@@ -231,4 +236,3 @@ class PembelianController extends Controller
         return redirect()->action('User\PembelianController@index');
     }
 }
-
