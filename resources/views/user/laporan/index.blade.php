@@ -8,7 +8,7 @@
 			<label for="periode">Pilih Periode:</label>
 			<select id="periode" class="form-control">
 				@foreach($periodeList as $item)
-					<option value="{{$item->id}}" {{$item->id==$periode->id? 'selected':''}}>{{$item->id}}</option>
+					<option value="{{$item->id}}" {{$item->id==$periode->id? 'selected':''}}>{{$item->id}} ({{\Carbon\Carbon::parse($item->tgl_awal)->formatLocalized('%d %B %Y')}} - {{\Carbon\Carbon::parse($item->tgl_akhir)->formatLocalized('%d %B %Y')}})</option>
 				@endforeach
 			</select>
 		</div>
