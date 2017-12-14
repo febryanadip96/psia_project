@@ -80,7 +80,7 @@ class PenjualanController extends Controller
         //bila pengiriman = 1 tidak ada biaya dan dibayar oleh
         if($request->pengiriman==2){
             $notaJual->biaya_kirim = $request->biaya_kirim;
-            $notaJual->dibayar_oleh = $request->pengiriman;
+            $notaJual->dibayar_oleh = $request->dibayar_oleh;
             $notaJual->jasa_pengiriman_id = $request->jasa_pengiriman_id;
         }
 
@@ -218,9 +218,9 @@ class PenjualanController extends Controller
             $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaJual->biaya_kirim]);
         }
 
-        
+
        return redirect()->action('User\PenjualanController@index');
-    	
- 
+
+
     }
 }

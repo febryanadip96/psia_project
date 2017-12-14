@@ -79,7 +79,7 @@ class PembelianController extends Controller
         //bila pengiriman = 1 tidak ada biaya dan dibayar oleh
         if($request->pengiriman==2){
             $notaBeli->biaya_kirim = $request->biaya_kirim;
-            $notaBeli->dibayar_oleh = $request->pengiriman;
+            $notaBeli->dibayar_oleh = $request->dibayar_oleh;
             $notaBeli->jasa_pengiriman_id = $request->jasa_pengiriman_id;
         }
 
@@ -92,7 +92,7 @@ class PembelianController extends Controller
         $subtotals = $request->subtotal;
 
 		$biaya_kirim_per_barang = 0;
-		if($request->pengiriman == 2){
+		if($request->pengiriman == 2 && $request->dibayar_oleh == 1){
 			$biaya_kirim_per_barang = $notaBeli->biaya_kirim/count($barangs);
 		}
 
