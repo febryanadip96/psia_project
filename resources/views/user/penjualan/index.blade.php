@@ -29,23 +29,13 @@
                     <td>
                         @if($notaJual->status!='Lunas')
                             <a href="{{url('penjualan/pelunasan/'.$notaJual->nomor)}}"><span class="glyphicon glyphicon-file"></span></a>
-                        @endif
-                        @if($notaJual->status=='Lunas' && $notaJual->cara_bayar == 'kredit')
-                            <a href="{{url('penjualan/pelunasan/'.$notaJual->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        @endif
-                        @if($notaJual->status=='Lunas' && $notaJual->cara_bayar == 'tunai')
-                            <a href="{{url('penjualan/pelunasan/'.$notaJual->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        @endif
-                        @if($notaJual->status=='Lunas' && $notaJual->cara_bayar == 'cek')
-                            <a href="{{url('penjualan/pelunasan/'.$notaJual->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        @endif
-                        @if($notaJual->status=='Lunas' && $notaJual->cara_bayar == 'transfer')
+                        @else
                             <a href="{{url('penjualan/pelunasan/'.$notaJual->nomor.'/lihat')}}"><span class="glyphicon glyphicon-eye-open"></span></a>
                         @endif
                     </td>
                 </tr>
             @endforeach
-            
+
         </tbody>
     </table>
 </div>
