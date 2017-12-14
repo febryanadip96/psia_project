@@ -99,7 +99,7 @@ class PembelianController extends Controller
         foreach ($barangs as $key => $barang) {
 			$notaBeli->barang()->attach($barang, ['qty' => $qtys[$key], 'harga' => $hargas[$key], 'subtotal' => $subtotals[$key]*(100-$notaBeli->diskon_langsung)/100]);
             $barang = Barang::where('kode', $barang)->first();
-			$barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]*(100-$notaBeli->diskon_langsung)/100))/($barang->stok+$qtys[$key])+$biaya_kirim_per_barang;
+			$barang->harga_beli_rata = (($barang->harga_beli_rata*$barang->stok)+($subtotals[$key]*(100-$notaBeli->diskon_langsung)/100)+$biaya_kirim_per_barang)/($barang->stok+$qtys[$key]);
             $barang->stok += $qtys[$key];
             $barang->save();
         }
