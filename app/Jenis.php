@@ -12,7 +12,7 @@ class Jenis extends Model
     public $timestamps=false;
 	protected $guarded=['id'];
 
-	public function jenis()
+	public function barang()
 	{
 		return $this->hasMany('App\Barang', 'jenis_id');
 	}
