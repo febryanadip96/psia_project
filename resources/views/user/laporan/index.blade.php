@@ -65,6 +65,14 @@
 						<td>Kredit</td>
 						<td>Nomor Bukti</td>
 					</tr>
+					<tr>
+						<td>-</td>
+						<td>Saldo Awal</td>
+						<td>Rp. {{$akuns->where('nomor', $arusKas->nomor)->first()->periode->where('id', $periode->id)->first()->pivot->saldo_awal?number_format($akuns->where('nomor', $arusKas->nomor)->first()->periode->where('id', $periode->id)->first()->pivot->saldo_awal,0,',','.'):0}}</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
 				@foreach($bukuBesar->where('akun_nomor', $arusKas->nomor) as $item)
 					<tr>
 						<td>{{\Carbon\Carbon::parse($item->tanggal)->formatLocalized('%A, %d %B %Y')}}</td>
