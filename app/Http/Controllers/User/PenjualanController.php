@@ -146,7 +146,7 @@ class PenjualanController extends Controller
             $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => $notaJual->grand_total, 'nominal_kredit' => 0]);
         }
         else if($notaJual->cara_bayar == 2){//transfer
-            if($notaJual->bank_id == 1){//bank baca-baca
+            if($notaJual->bank_id == 2){//bank baca-baca
                 $akun = Akun::find('102');
             }
             else{//bank suka sendiri

@@ -173,7 +173,7 @@ class PembelianController extends Controller
             $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->grand_total]);
         }
         else if($notaBeli->cara_bayar == 2){//transfer
-            if($notaBeli->bank_id == 1){//bank baca-baca
+            if($notaBeli->bank_id == 2){//bank baca-baca
                 $akun = Akun::find('102');
             }
             else{//bank suka sendiri
@@ -214,7 +214,7 @@ class PembelianController extends Controller
                 $akun->jurnal()->attach($jurnal->id, ['urutan' => $urutan, 'nominal_debet' => 0, 'nominal_kredit' => $notaBeli->biaya_kirim]);
             }
             else if($notaBeli->cara_bayar == 2){//transfer
-                if($notaBeli->bank_id == 1){
+                if($notaBeli->bank_id == 2){
                     $akun = Akun::find('102');
                 }
                 else{

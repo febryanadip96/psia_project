@@ -79,9 +79,10 @@ class Data
     public static function ArusKas($idPeriode)
     {
         $hasil = DB::table('akun as a')
-            ->leftJoin('akun_has_jurnal as ja', 'ja.akun_nomor', '=', 'a.nomor')
+            ->join('akun_has_jurnal as ja', 'ja.akun_nomor', '=', 'a.nomor')
+			->join('jurnal as j', 'ja.jurnal_id', '=', 'j.id')
             ->join('periode_has_akun as pa', 'pa.akun_nomor', '=', 'a.nomor')
-            ->join('periode as p', 'p.id', '=', 'pa.periode_id')
+            ->join('periode as p', 'p.id', '=', 'j.periode_id')
             ->join('laporan_has_akun as l', 'a.nomor', '=', 'l.akun_nomor')
             ->selectRaw('a.nomor as nomor, a.nama as NamaAkun, pa.saldo_awal + ifnull(((sum(ja.nominal_debet) - sum(ja.nominal_kredit)) * a.saldo_normal),0) AS SaldoAkhir',[])
             ->whereRaw('p.id = ? and l.laporan_id = "AK"', [$idPeriode])
@@ -97,6 +98,7 @@ class Data
             ->join('periode_has_akun as p', 'p.akun_nomor', '=', 'a.nomor')
             ->join('jurnal as j', 'aj.jurnal_id', '=', 'j.id')
             ->selectRaw('aj.akun_nomor AS akun_nomor, a.nama AS NamaAkun, j.tanggal AS tanggal, j.keterangan AS keterangan, aj.nominal_debet AS nominal_debet, aj.nominal_kredit AS nominal_kredit, j.no_bukti AS no_bukti',[])
+			->whereRaw('j.periode_id = ?',[$idPeriode])
             ->orderBy('aj.akun_nomor');
         return $hasil;
     }
